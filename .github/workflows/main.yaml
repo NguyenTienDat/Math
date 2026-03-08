@@ -1,0 +1,41 @@
+#Deploy from a branch: gh-pages /(root)
+name: Angular GitHub CI/CD
+on:
+  [push]
+  # push:
+  #   branches:
+  #     - deploy-github-2
+  #     - dev
+  #     - main
+permissions:
+  contents: write
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: |
+          npm i
+      - name: Build
+        run: |
+          npm run build:github
+
+      - name: Build and Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          # ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          # BASE_BRANCH: github
+          # BRANCH: gh-pages
+          FOLDER: docs
