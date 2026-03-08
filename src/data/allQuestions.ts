@@ -2,10 +2,8 @@ import { Question, QuestionType } from '../types';
 
 const createOptions = (correct: any, others: any[]) => {
   let uniqueOthers = others.filter(o => o !== correct);
-  // Ensure we have at least 3 unique other options
   const finalOthers = uniqueOthers.slice(0, 3);
   
-  // If we don't have enough, add some random offsets
   while (finalOthers.length < 3) {
     const offset = Math.floor(Math.random() * 10) + 1;
     const newVal = typeof correct === 'number' ? correct + offset : `${correct} ${finalOthers.length + 1}`;
@@ -19,13 +17,13 @@ const createOptions = (correct: any, others: any[]) => {
 };
 
 export const allQuestions: Question[] = [
-  // --- GRADE 1 ---
+  // --- GRADE 1 (15 Questions) ---
   {
     id: 1, grade: 1, type: QuestionType.COUNTING_CUBES,
-    text: "Có bao nhiêu khối lập phương trong hình?",
-    options: createOptions(10, [8, 9, 12]),
+    text: "Khối hình dưới đây được tạo thành từ các khối lập phương giống nhau. Hỏi đã có bao nhiêu khối lập phương đã được dùng?",
+    options: createOptions(10, [12, 8, 9]),
     correctAnswer: 10,
-    explanation: "Tầng dưới có 9 khối (xếp thành hình vuông 3x3), tầng trên có 1 khối ở giữa. Tổng cộng là 9 + 1 = 10 khối.",
+    explanation: "- Tầng dưới có 3 x 3 = 9 khối lập phương.\n- Tầng trên có 1 khối lập phương.\nVậy có tất cả 9 + 1 = 10 khối lập phương.",
     visualData: { type: 'cubes', layers: [9, 1] }
   },
   {
@@ -37,32 +35,40 @@ export const allQuestions: Question[] = [
     visualData: { sequence: ["🍎", "🍎", "🍌", "🍎", "🍎", "?"] }
   },
   {
-    id: 3, grade: 1, type: QuestionType.NUMBER_COMPARISON,
+    id: 3, grade: 1, type: QuestionType.LOGIC,
+    text: "Bạn An cao hơn bạn Bình. Bạn Bình cao hơn bạn Chi. Hỏi ai là người cao nhất?",
+    options: createOptions("Bạn An", ["Bạn Bình", "Bạn Chi", "Cả ba bằng nhau"]),
+    correctAnswer: "Bạn An",
+    explanation: "An > Bình và Bình > Chi. Theo tính chất bắc cầu, An là người cao nhất.",
+    visualData: {
+      characters: [
+        { name: "An", height: 100, color: "#3B82F6" },
+        { name: "Bình", height: 80, color: "#10B981" },
+        { name: "Chi", height: 60, color: "#F59E0B" }
+      ]
+    }
+  },
+  {
+    id: 4, grade: 1, type: QuestionType.NUMBER_COMPARISON,
     text: "Số nào lớn nhất trong các số sau: 5, 9, 2, 7?",
     options: createOptions(9, [5, 2, 7]),
     correctAnswer: 9,
     explanation: "Khi đếm từ 1 đến 10, số 9 xuất hiện sau các số 2, 5, 7 nên số 9 là số lớn nhất.",
   },
   {
-    id: 4, grade: 1, type: QuestionType.MISSING_NUMBER,
+    id: 5, grade: 1, type: QuestionType.MISSING_NUMBER,
     text: "Điền số còn thiếu vào chỗ trống: 2, 4, 6, ?, 10",
     options: createOptions(8, [5, 7, 9]),
     correctAnswer: 8,
     explanation: "Đây là dãy số tăng dần 2 đơn vị (dãy số chẵn). 6 cộng thêm 2 bằng 8.",
   },
   {
-    id: 5, grade: 1, type: QuestionType.LOGIC,
-    text: "Bạn An có 3 quả táo, bạn Bình có nhiều hơn bạn An 2 quả. Hỏi bạn Bình có mấy quả?",
-    options: createOptions(5, [3, 4, 6]),
-    correctAnswer: 5,
-    explanation: "Số táo của Bình = Số táo của An + 2 = 3 + 2 = 5 quả.",
-  },
-  {
     id: 6, grade: 1, type: QuestionType.GEOMETRY,
-    text: "Hình nào có 4 cạnh bằng nhau?",
-    options: createOptions("Hình vuông", ["Hình tam giác", "Hình tròn", "Hình thang"]),
-    correctAnswer: "Hình vuông",
-    explanation: "Hình vuông là hình có 4 cạnh dài bằng nhau và 4 góc vuông.",
+    text: "Hình tam giác có bao nhiêu cạnh?",
+    options: createOptions(3, [2, 4, 5]),
+    correctAnswer: 3,
+    explanation: "Hình tam giác là hình có 3 cạnh và 3 góc.",
+    visualData: { shape: "triangle" }
   },
   {
     id: 7, grade: 1, type: QuestionType.WORD_PROBLEM,
@@ -72,131 +78,138 @@ export const allQuestions: Question[] = [
     explanation: "2 con gà có: 2 x 2 = 4 chân. 1 con chó có 4 chân. Tổng cộng: 4 + 4 = 8 chân.",
   },
 
-  // --- GRADE 2 ---
+  // --- GRADE 2 (15 Questions) ---
   {
-    id: 101, grade: 2, type: QuestionType.ARITHMETIC_VISUAL,
+    id: 101, grade: 2, type: QuestionType.WORD_PROBLEM,
+    text: "Mỗi cây nấm chỉ che được số chú lùn bằng đúng số chấm trên cây nấm đó. Một mặt của 4 cây nấm có số chấm lần lượt là: 3, 4, 2, 5. Mặt còn lại cũng có số chấm y hệt. Nếu có 30 chú lùn, hỏi có bao nhiêu chú lùn bị ướt?",
+    options: createOptions(2, [3, 4, 5]),
+    correctAnswer: 2,
+    explanation: "Tổng số chấm trên 4 cây nấm là: (3+4+2+5) x 2 = 14 x 2 = 28. Vậy có 30 - 28 = 2 chú lùn bị ướt.",
+  },
+  {
+    id: 102, grade: 2, type: QuestionType.LOGIC,
+    text: "Chú chó đi tìm thức ăn. Tại các ngã rẽ, chú đã rẽ phải tổng cộng 3 lần và rẽ trái tổng cộng 2 lần. Hỏi chú chó đã đi theo đường nào?",
+    options: createOptions("Đường có 3 phải, 2 trái", ["Đường có 2 phải, 3 trái", "Đường có 5 phải", "Đường có 5 trái"]),
+    correctAnswer: "Đường có 3 phải, 2 trái",
+    explanation: "Dựa vào đề bài, ta cần tìm con đường mà chú chó thực hiện đúng 3 lần rẽ phải và 2 lần rẽ trái.",
+  },
+  {
+    id: 103, grade: 2, type: QuestionType.ARITHMETIC_VISUAL,
     text: "Mỗi túi có 5 viên kẹo. 4 túi như vậy có bao nhiêu viên kẹo?",
     options: createOptions(20, [15, 25, 10]),
     correctAnswer: 20,
     explanation: "Có 4 nhóm, mỗi nhóm có 5 viên. Ta thực hiện phép nhân: 5 x 4 = 20 viên kẹo.",
   },
   {
-    id: 102, grade: 2, type: QuestionType.GEOMETRY,
+    id: 104, grade: 2, type: QuestionType.GEOMETRY,
     text: "Hình chữ nhật có bao nhiêu góc vuông?",
     options: createOptions(4, [2, 3, 0]),
     correctAnswer: 4,
     explanation: "Hình chữ nhật có đặc điểm là có 4 cạnh và 4 góc đều là góc vuông.",
   },
   {
-    id: 103, grade: 2, type: QuestionType.PATTERNS,
+    id: 105, grade: 2, type: QuestionType.PATTERNS,
     text: "Dãy số: 5, 10, 15, 20, ... Số tiếp theo là?",
     options: createOptions(25, [22, 30, 35]),
     correctAnswer: 25,
     explanation: "Dãy số này tăng dần 5 đơn vị mỗi bước. 20 + 5 = 25.",
   },
   {
-    id: 104, grade: 2, type: QuestionType.NUMBER_COMPARISON,
-    text: "Điền dấu thích hợp vào chỗ trống: 45 + 12 ... 60",
-    options: createOptions("<", [">", "=", "Không so sánh được"]),
-    correctAnswer: "<",
-    explanation: "Ta tính 45 + 12 = 57. Vì 57 bé hơn 60 nên đáp án đúng là dấu <.",
-  },
-  {
-    id: 105, grade: 2, type: QuestionType.LOGIC,
-    text: "Kim ngắn chỉ số 3, kim dài chỉ số 12. Bây giờ là mấy giờ?",
-    options: createOptions("3 giờ đúng", ["12 giờ 15 phút", "3 giờ 30 phút", "12 giờ đúng"]),
-    correctAnswer: "3 giờ đúng",
-    explanation: "Khi kim dài chỉ số 12 là giờ đúng, kim ngắn chỉ số nào thì đó là giờ đó.",
+    id: 106, grade: 2, type: QuestionType.LOGIC,
+    text: "Một con ốc sên leo cột điện cao 10m. Ban ngày leo 3m, ban đêm tụt 2m. Hỏi sau bao nhiêu ngày nó leo tới đỉnh?",
+    options: createOptions(8, [10, 7, 9]),
+    correctAnswer: 8,
+    explanation: "Mỗi ngày đêm leo được 1m. Đến ngày thứ 7 nó leo được 7m. Sang ngày thứ 8 nó leo thêm 3m là tới đỉnh (7+3=10).",
   },
 
-  // --- GRADE 3 ---
+  // --- GRADE 3 (15 Questions) ---
   {
-    id: 201, grade: 3, type: QuestionType.WORD_PROBLEM,
+    id: 201, grade: 3, type: QuestionType.LOGIC,
+    text: "Một tên cướp biển có hai thùng vàng. Thùng trái có 10 đồng, thùng phải không có đồng nào. Mỗi ngày hắn bỏ 1 đồng vào thùng trái và 2 đồng vào thùng phải. Sau bao nhiêu ngày thì số vàng hai thùng bằng nhau?",
+    options: createOptions(10, [5, 8, 12]),
+    correctAnswer: 10,
+    explanation: "Sau n ngày, thùng trái có 10 + n, thùng phải có 2n. Để bằng nhau: 10 + n = 2n => n = 10 ngày.",
+  },
+  {
+    id: 202, grade: 3, type: QuestionType.GEOMETRY,
+    text: "Một sàn được phủ bằng các viên gạch hình chữ nhật giống nhau. Chiều rộng mỗi viên là 1m. Biết chiều dài 1 viên bằng 4 lần chiều rộng. Tính chiều dài đoạn thẳng gồm 4 chiều rộng và 2 chiều dài viên gạch.",
+    options: createOptions(12, [6, 8, 10]),
+    correctAnswer: 12,
+    explanation: "Chiều dài 1 viên = 4m. Đoạn thẳng = (4 x 1m) + (2 x 4m) = 4m + 8m = 12m.",
+  },
+  {
+    id: 203, grade: 3, type: QuestionType.WORD_PROBLEM,
     text: "Một cửa hàng có 45 quyển vở, đã bán đi 1/5 số vở đó. Hỏi còn lại bao nhiêu quyển?",
     options: createOptions(36, [9, 40, 35]),
     correctAnswer: 36,
     explanation: "Số vở đã bán: 45 : 5 = 9 quyển. Số vở còn lại: 45 - 9 = 36 quyển.",
   },
   {
-    id: 202, grade: 3, type: QuestionType.LOGIC,
+    id: 204, grade: 3, type: QuestionType.LOGIC,
     text: "Nếu hôm nay là thứ Hai, thì 10 ngày nữa là thứ mấy?",
     options: createOptions("Thứ Năm", ["Thứ Tư", "Thứ Sáu", "Thứ Bảy"]),
     correctAnswer: "Thứ Năm",
     explanation: "7 ngày nữa sẽ quay lại thứ Hai. Thêm 3 ngày nữa (Thứ Ba, Thứ Tư, Thứ Năm). Vậy 10 ngày nữa là thứ Năm.",
   },
-  {
-    id: 203, grade: 3, type: QuestionType.GEOMETRY,
-    text: "Chu vi hình vuông có cạnh 5cm là bao nhiêu?",
-    options: createOptions("20 cm", ["10 cm", "25 cm", "15 cm"]),
-    correctAnswer: "20 cm",
-    explanation: "Chu vi hình vuông = Cạnh x 4 = 5 x 4 = 20 cm.",
-  },
-  {
-    id: 204, grade: 3, type: QuestionType.MISSING_NUMBER,
-    text: "Tìm x: x : 4 = 12",
-    options: createOptions(48, [3, 16, 40]),
-    correctAnswer: 48,
-    explanation: "Trong phép chia, muốn tìm số bị chia ta lấy thương nhân với số chia: 12 x 4 = 48.",
-  },
 
-  // --- GRADE 4 ---
+  // --- GRADE 4 (15 Questions) ---
   {
-    id: 301, grade: 4, type: QuestionType.ARITHMETIC_VISUAL,
+    id: 301, grade: 4, type: QuestionType.LOGIC,
+    text: "Bạn Khủng Long đi qua mê cung các phòng đánh số 1-8 (hàng trên 1-4, hàng dưới 5-8). Bạn ấy đi từ 1 đến 8 và không qua phòng nào quá 1 lần. Hỏi tổng lớn nhất các số trong các phòng bạn ấy đi qua là bao nhiêu?",
+    options: createOptions(34, [27, 29, 32]),
+    correctAnswer: 34,
+    explanation: "Đường đi cho tổng lớn nhất là: 1 -> 5 -> 6 -> 7 -> 3 -> 4 -> 8. Tổng = 1+5+6+7+3+4+8 = 34.",
+  },
+  {
+    id: 302, grade: 4, type: QuestionType.GEOMETRY,
+    text: "Xoay một hình vuông chứa một đoạn thẳng 90 độ theo chiều kim đồng hồ, sau đó đặt chồng lên hình vuông ban đầu. Hình nào dưới đây mô tả đúng kết quả?",
+    options: createOptions("Hình có hai đoạn thẳng vuông góc", ["Hình có hai đoạn thẳng song song", "Hình không đổi", "Hình mất đoạn thẳng"]),
+    correctAnswer: "Hình có hai đoạn thẳng vuông góc",
+    explanation: "Đoạn thẳng ban đầu khi xoay 90 độ sẽ trở thành đoạn thẳng vuông góc với chính nó. Khi chồng lên nhau ta được hình có hai đoạn thẳng vuông góc.",
+  },
+  {
+    id: 303, grade: 4, type: QuestionType.ARITHMETIC_VISUAL,
     text: "Tìm x biết: x * 12 = 144",
     options: createOptions(12, [10, 14, 11]),
     correctAnswer: 12,
     explanation: "Muốn tìm thừa số chưa biết, ta lấy tích chia cho thừa số đã biết: 144 : 12 = 12.",
   },
   {
-    id: 302, grade: 4, type: QuestionType.GEOMETRY,
+    id: 304, grade: 4, type: QuestionType.GEOMETRY,
     text: "Diện tích hình vuông có cạnh 8cm là bao nhiêu?",
     options: createOptions("64 cm²", ["32 cm²", "16 cm²", "60 cm²"]),
     correctAnswer: "64 cm²",
     explanation: "Diện tích hình vuông = Cạnh x Cạnh = 8 x 8 = 64 cm².",
   },
-  {
-    id: 303, grade: 4, type: QuestionType.WORD_PROBLEM,
-    text: "Trung bình cộng của hai số là 50. Biết một số là 40, tìm số còn lại.",
-    options: createOptions(60, [50, 40, 70]),
-    correctAnswer: 60,
-    explanation: "Tổng hai số = Trung bình cộng x 2 = 50 x 2 = 100. Số còn lại = 100 - 40 = 60.",
-  },
-  {
-    id: 304, grade: 4, type: QuestionType.LOGIC,
-    text: "Một năm nhuận có bao nhiêu ngày?",
-    options: createOptions(366, [365, 364, 360]),
-    correctAnswer: 366,
-    explanation: "Năm thường có 365 ngày, năm nhuận có thêm 1 ngày vào tháng 2 nên có 366 ngày.",
-  },
 
-  // --- GRADE 5 ---
+  // --- GRADE 5 (15 Questions) ---
   {
-    id: 401, grade: 5, type: QuestionType.WORD_PROBLEM,
+    id: 401, grade: 5, type: QuestionType.LOGIC,
+    text: "Jimmy dán 6 hình (Vịt, Voi, Chuột, Bọ cánh cam, Chó, Ruồi) vào 6 mặt khối lập phương. Vịt kề với Chuột, Bọ, Voi, Chó. Hỏi hình nào đối diện với Vịt?",
+    options: createOptions("Ruồi", ["Voi", "Chuột", "Bọ cánh cam"]),
+    correctAnswer: "Ruồi",
+    explanation: "Vì Vịt kề với 4 hình (Voi, Chuột, Bọ, Chó), nên hình duy nhất còn lại là Ruồi phải ở mặt đối diện.",
+  },
+  {
+    id: 402, grade: 5, type: QuestionType.LOGIC,
+    text: "Emma đặt các đồng xu ngũ giác cạnh nhau. Các số ở hai tam giác chung cạnh phải bằng nhau. Nếu các đồng xu đã đặt có các số khớp nhau, số ở vị trí X sẽ là bao nhiêu?",
+    options: createOptions(2, [1, 3, 5]),
+    correctAnswer: 2,
+    explanation: "Dựa vào quy tắc khớp số ở các cạnh chung, ta lần lượt xác định các số xung quanh cho đến khi tìm được X = 2.",
+  },
+  {
+    id: 403, grade: 5, type: QuestionType.WORD_PROBLEM,
     text: "Một ô tô đi được 120km trong 2.5 giờ. Vận tốc của ô tô là bao nhiêu?",
     options: createOptions("48 km/h", ["50 km/h", "45 km/h", "60 km/h"]),
     correctAnswer: "48 km/h",
     explanation: "Vận tốc = Quãng đường : Thời gian = 120 : 2.5 = 48 km/h.",
   },
   {
-    id: 402, grade: 5, type: QuestionType.LOGIC,
-    text: "Tổng của hai số là 100, hiệu của chúng là 20. Số lớn là bao nhiêu?",
-    options: createOptions(60, [40, 80, 50]),
-    correctAnswer: 60,
-    explanation: "Công thức tìm số lớn khi biết tổng và hiệu: (Tổng + Hiệu) : 2 = (100 + 20) : 2 = 60.",
-  },
-  {
-    id: 403, grade: 5, type: QuestionType.GEOMETRY,
+    id: 404, grade: 5, type: QuestionType.GEOMETRY,
     text: "Diện tích hình tròn có bán kính 2cm là bao nhiêu? (Lấy pi = 3.14)",
     options: createOptions("12.56 cm²", ["6.28 cm²", "15.7 cm²", "10.24 cm²"]),
     correctAnswer: "12.56 cm²",
     explanation: "Diện tích hình tròn = Bán kính x Bán kính x 3.14 = 2 x 2 x 3.14 = 12.56 cm².",
-  },
-  {
-    id: 404, grade: 5, type: QuestionType.PATTERNS,
-    text: "Dãy số: 1, 4, 9, 16, ... Số tiếp theo là?",
-    options: createOptions(25, [20, 30, 36]),
-    correctAnswer: 25,
-    explanation: "Đây là dãy các số chính phương: 1x1, 2x2, 3x3, 4x4. Số tiếp theo là 5x5 = 25.",
   }
 ];
 
@@ -206,7 +219,8 @@ export const getQuestionsByGrade = (grade: number): Question[] => {
   const filled = [...existing];
   const types = Object.values(QuestionType);
   
-  for (let i = existing.length + 1; i <= 30; i++) {
+  // Fill up to exactly 15 questions per grade
+  for (let i = existing.length + 1; i <= 15; i++) {
     const type = types[i % types.length];
     let text = "";
     let ans: any = "";
@@ -245,5 +259,5 @@ export const getQuestionsByGrade = (grade: number): Question[] => {
     });
   }
   
-  return filled.sort((a, b) => a.id - b.id);
+  return filled.slice(0, 15).sort((a, b) => a.id - b.id);
 };

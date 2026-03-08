@@ -213,7 +213,7 @@ export default function App() {
                 </div>
                 
                 <h3 className="text-2xl font-bold text-slate-900 mb-2">Lớp {grade}</h3>
-                <p className="text-slate-500 mb-6">30 câu hỏi tư duy logic & toán đố thực tế.</p>
+                <p className="text-slate-500 mb-6">15 câu hỏi tư duy logic & toán đố thực tế.</p>
                 
                 <div className="flex items-center gap-2 text-blue-600 font-bold group-hover:gap-4 transition-all">
                   Bắt đầu học <ArrowRight className="w-5 h-5" />
