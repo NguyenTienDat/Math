@@ -1,7 +1,20 @@
 import { Question, QuestionType } from '../types';
 
 const createOptions = (correct: any, others: any[]) => {
-  const all = Array.from(new Set([correct, ...others])).sort(() => Math.random() - 0.5);
+  let uniqueOthers = others.filter(o => o !== correct);
+  // Ensure we have at least 3 unique other options
+  const finalOthers = uniqueOthers.slice(0, 3);
+  
+  // If we don't have enough, add some random offsets
+  while (finalOthers.length < 3) {
+    const offset = Math.floor(Math.random() * 10) + 1;
+    const newVal = typeof correct === 'number' ? correct + offset : `${correct} ${finalOthers.length + 1}`;
+    if (!finalOthers.includes(newVal) && newVal !== correct) {
+      finalOthers.push(newVal);
+    }
+  }
+
+  const all = [correct, ...finalOthers].sort(() => Math.random() - 0.5);
   return all.map((val, i) => ({ id: String.fromCharCode(97 + i), value: val }));
 };
 
@@ -84,9 +97,9 @@ export const allQuestions: Question[] = [
   {
     id: 104, grade: 2, type: QuestionType.NUMBER_COMPARISON,
     text: "Điền dấu thích hợp vào chỗ trống: 45 + 12 ... 60",
-    options: createOptions(">", ["<", "=", "Không so sánh được"]),
-    correctAnswer: ">",
-    explanation: "Ta tính 45 + 12 = 57. Vì 57 < 60 nên đáp án đúng là dấu <. (Đợi đã, 57 < 60 nên dấu là <). Sửa lại: 57 bé hơn 60.",
+    options: createOptions("<", [">", "=", "Không so sánh được"]),
+    correctAnswer: "<",
+    explanation: "Ta tính 45 + 12 = 57. Vì 57 bé hơn 60 nên đáp án đúng là dấu <.",
   },
   {
     id: 105, grade: 2, type: QuestionType.LOGIC,
@@ -190,7 +203,6 @@ export const allQuestions: Question[] = [
 export const getQuestionsByGrade = (grade: number): Question[] => {
   const existing = allQuestions.filter(q => q.grade === grade);
   
-  // Fill with generated questions to reach 30, but with better variety and explanations
   const filled = [...existing];
   const types = Object.values(QuestionType);
   
@@ -201,27 +213,25 @@ export const getQuestionsByGrade = (grade: number): Question[] => {
     let expl = "";
     let opts: any[] = [];
 
-    // Simple generators based on grade
     if (type === QuestionType.MISSING_NUMBER) {
       const start = i * grade;
       const step = grade;
       text = `Điền số tiếp theo vào dãy: ${start}, ${start + step}, ${start + step * 2}, ...`;
       ans = start + step * 3;
       expl = `Dãy số tăng dần ${step} đơn vị mỗi bước. ${start + step * 2} + ${step} = ${ans}.`;
-      opts = [ans - step, ans + step, ans + 5];
+      opts = [ans - step, ans + step, ans + 5, ans + 10];
     } else if (type === QuestionType.NUMBER_COMPARISON) {
       const n1 = i * 5 + grade;
       const n2 = i * 4 + grade * 2;
       text = `Số nào lớn hơn: ${n1} hay ${n2}?`;
       ans = n1 > n2 ? n1 : n2;
       expl = `So sánh hai số ${n1} và ${n2}, ta thấy ${ans} là số lớn hơn.`;
-      opts = [n1 < n2 ? n1 : n2, n1 + n2, Math.abs(n1 - n2)];
+      opts = [n1 < n2 ? n1 : n2, n1 + n2, Math.abs(n1 - n2), n1 * 2];
     } else {
-      // Fallback for other types to ensure we always have 30
       ans = i + grade * 10;
-      text = `Câu hỏi ôn tập kiến thức Lớp ${grade} số ${i}: Kết quả của ${i} + ${grade * 10} là bao nhiêu?`;
+      text = `Kết quả của phép tính ${i} + ${grade * 10} là bao nhiêu?`;
       expl = `Thực hiện phép tính cộng đơn giản: ${i} + ${grade * 10} = ${ans}.`;
-      opts = [ans - 1, ans + 1, ans + 10];
+      opts = [ans - 1, ans + 1, ans + 10, ans + 5];
     }
 
     filled.push({
