@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Quicksand", ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  @apply bg-[#F8FAFC] text-[#1E293B] antialiased;
+}
+
+.math-card {
+  @apply bg-white rounded-[32px] shadow-sm border border-slate-100 overflow-hidden;
+}
+
+.option-btn {
+  @apply flex items-center justify-center px-8 py-4 rounded-full border-2 border-slate-200 text-lg font-semibold transition-all duration-200 hover:border-blue-400 hover:bg-blue-50 active:scale-95;
+}
+
+.option-btn.selected {
+  @apply border-blue-500 bg-blue-50 text-blue-600;
+}
+
+.option-btn.correct {
+  @apply border-green-500 bg-green-50 text-green-600;
+}
+
+.option-btn.wrong {
+  @apply border-red-500 bg-red-50 text-red-600;
+}
+
+/* Custom scrollbar for better look */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #E2E8F0;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #CBD5E1;
+}
+
